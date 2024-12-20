@@ -72,14 +72,7 @@ fetch(url)
   });   
   Filtres.appendChild(bouton3)
 
-  //Connexion
-  let BaliseEmail = document.getElementById("email");
-  let BaliseMpd = document.getElementById("motdepasse")
   
-  let Connexion  =document.getElementById("#BoutonConnexion");
-  Connexion.addEventListener
-  
-
 
 })
 
