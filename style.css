@@ -188,19 +188,25 @@ footer nav ul {
 
 /* TEST BOUTON */
 .filtres{
-	border: 1px solid red;
+	margin-bottom: 20px;
 	height: 80px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap:10px;
 }
+
 button{
 	border:1px solid #1D6154;
 	border-radius: 60px 60px 60px 60px;
 	color: #1D6154;
 	height: 37px;
 	width: 100px;
+}
+button:hover{
+	color:#fffef8 ;
+	background-color: #1D6154;
+
 }
 
 /*LOG IN*/
@@ -217,6 +223,9 @@ h2{
 	color: #1D6154;
 }
 .form_log_in{
+	
+	height: 200px;
+	border: 1px solid red;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -224,10 +233,20 @@ h2{
 }
 
 #email, #motdepasse{
-	gap: 10px;
+	padding: 5px;
 	border: none;
-	height: 25px;
+	height: 150px;
 	width: 300px;
 	filter: drop-shadow(0px 4px 14px rgba(0, 0, 0, 0.1));
 }
 
+.pied_de_page{
+	width: 100%;
+	margin-top: 250px;
+	border: 1px solid red;
+	background-color: white;
+}
+
+.form_log_in p{
+	color: red;
+}
