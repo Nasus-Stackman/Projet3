@@ -72,7 +72,16 @@ fetch(url)
   });   
   Filtres.appendChild(bouton3)
 
+  // CONNEXION AVEC LOGIN
+
+  function LancerPage2(){
+    window.location.assign("index_2_login.html")
+  }
   
+  const Login = document.querySelector(".login")
+  Login.addEventListener("click", function(){
+    LancerPage2()
+  })
 
 })
 
