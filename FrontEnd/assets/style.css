@@ -187,6 +187,7 @@ footer nav ul {
 }
 
 /* TEST BOUTON */
+
 .filtres{
 	margin-bottom: 20px;
 	height: 80px;
@@ -203,6 +204,7 @@ button{
 	height: 37px;
 	width: 100px;
 }
+
 button:hover{
 	color:#fffef8 ;
 	background-color: #1D6154;
@@ -237,7 +239,7 @@ html{
 	gap: 15px;
 }
 
-#email_connexion, #motdepasse{
+#email_connexion, #motdepasse, .Div_form input{
 	font-size: 18px;
 	padding: 5px;
 	border: none;
@@ -333,10 +335,122 @@ html{
 
 .modal-wrapper{
 	background-color: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 	width: 50%;
-	height: 500px;
+	height: 560px;
+	padding: 30px;
 }
 
-.boutton_fermer{
-	
+.cacher{
+	display: none;
+}
+
+.Div_fermeture{
+	display: flex;
+	justify-content: flex-end;
+}
+
+.Div_titre{
+	align-self: center;
+}
+
+.Div_projets{
+	height: 64%;
+	width: 72%;
+	margin-left: 13%;
+	border-bottom: 1px solid #B3B3B3;
+	display: grid;
+	grid-template-columns: 18% 18% 18% 18% 18%;
+	grid-template-rows: 30% 30% 30%;
+	gap: 6px;
+}
+
+.Div_projets img{
+	height: 100%;
+	width: 100%;
+}
+
+.Div_ajouter{
+	display: flex;
+	justify-content: center;
+    margin-top: 7%;
+}
+
+.Titre_modale_haut{
+	font-family: work Sans;
+	color: black;
+}
+
+.js-boutton_fermer, .js-boutton_fermer2, #Retour{
+	border: 1px solid white;
+	background-color: white;
+	border-radius: 25px 25px 25px 25px;
+	width: 5%;
+}
+
+#croix, #croix2, #fleche{
+	color: black;
+	font-size: 24px;
+}
+
+.js-boutton_fermer:hover, .js-boutton_fermer2:hover, #Retour:hover{
+	background-color: #b3b3b3;
+}
+
+/* MODALE 2*/
+
+.VISIBLE{
+	display: block;
+}
+
+.V{
+	display: none;
+}
+
+.Div_fermeture2{
+	display: flex;
+	justify-content: space-between;
+}
+
+.Div_deposer{
+	background-color: #E8F1F6;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+    height: 170px;
+	width: 66%;
+	margin-left: 17%;
+	margin-bottom: 20px;
+}
+
+.Div_form{
+	display: flex;
+	flex-direction: column;
+	width: 66%;
+	margin-left: 17%;
+	gap: 5px;
+}
+
+.Div_envoie{
+	display: flex;
+	justify-content: center;
+	width: 66%;
+	margin-left: 17%;
+}
+
+.Bouton_dimension{
+	height: 40px;
+	width: 42%;
+}
+
+.Div_form input{
+	font-size: 18px;
+	padding: 5px;
+	border: none;
+	height: 50px;
+	width: 98%;
+	filter: drop-shadow(0px 4px 14px rgba(0, 0, 0, 0.1));
 }

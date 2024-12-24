@@ -9,7 +9,9 @@ const OpenModale = function (e){
     modale = target
     modale.addEventListener("click", closeModale)
     modale.querySelector(".js-boutton_fermer").addEventListener("click", closeModale)
+    modale.querySelector(".js-boutton_fermer2").addEventListener("click", closeModale)
     modale.querySelector(".stop").addEventListener("click", stopPropagation)
+    modale.querySelector(".stop2").addEventListener("click", stopPropagation)
 }
 
 const closeModale = function(e){
@@ -20,7 +22,9 @@ const closeModale = function(e){
     modale.removeAttribute("aria-modal")
     modale.removeEventListener("click", closeModale)
     modale.querySelector(".js-boutton_fermer").removeEventListener("click", closeModale )
+    modale.querySelector(".js-boutton_fermer2").removeEventListener("click", closeModale)
     modale.querySelector(".stop").removeEventListener("click", stopPropagation)
+    modale.querySelector(".stop2").removeEventListener("click", stopPropagation)
     modale = null
 }
 
@@ -32,8 +36,32 @@ document.querySelectorAll(".modale_js").forEach(a =>{
     a.addEventListener("click", OpenModale)
 })
 
-window.addEventListener("keyboard", function (e){
+window.addEventListener("keydown", function (e){
     if (e.key === "Escape" || e.key === "Esc"){
         closeModale(e)
     }
 })
+
+// CHANGEMENT DE PAGE MODALE
+
+const BLOC1 = document.getElementById("V1")
+const BLOC2 = document.getElementById("V2")
+const vue1 = document.getElementById("Retour")
+const vue2 = document.getElementById("ajouter_photo")
+console.log(BLOC2)
+vue2.addEventListener("click", ()=>{
+    BLOC2.classList.add('VISIBLE')
+    BLOC2.classList.remove('V')
+    BLOC1.classList.remove('VISIBLE')
+    BLOC1.classList.add("V")
+    console.log(BLOC2)
+})
+vue1.addEventListener("click", ()=>{
+    BLOC1.classList.add('VISIBLE')
+    BLOC1.classList.remove("V")
+    BLOC2.classList.remove('VISIBLE')
+    BLOC2.classList.add('V')
+    console.log(BLOC2)   
+})
+
+
