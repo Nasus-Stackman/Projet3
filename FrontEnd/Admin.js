@@ -79,14 +79,35 @@ fetch(url)
   function genererImages(projets){
     for (let i = 0; i < projets.length; i++) {
       const element = projets[i];
+      const article = document.createElement("article");
+      article.classList.add("article_image")
       const imageElement = document.createElement("img");
       imageElement.src = element.imageUrl;
-      imagesModale.appendChild(imageElement)
+      const poubelle = document.createElement("button");
+      poubelle.classList.add("poubelle")
+      poubelle.innerHTML = '<i id="icone_poubelle" class="fa-solid fa-trash-can"></i'
+      poubelle.setAttribute("id", i)
+      article.appendChild(poubelle)
+      article.appendChild(imageElement)
+      imagesModale.appendChild(article)
+      console.log(poubelle)
     }
   }
   genererImages(projets);
-
+  
+  // peut être créer un id différent à chaque fois
+  
+  // Récupération de la variable poubelle pour les futures suppressions
+  
+  const poubelle = document.querySelectorAll(".poubelle")
+  console.log(poubelle[4])
+  
   //SUPPRESSION PROJETS
+
+  poubelle.addEventListener("click", function(){
+    const rappel = document.createElement("button")
+    rappel.textContent = ""
+  })
 
   fetch("http://localhost:5678/api/works/", {
     method: "POST",

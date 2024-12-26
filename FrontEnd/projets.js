@@ -72,7 +72,7 @@ fetch(url)
   });   
   Filtres.appendChild(bouton3)
 
-  // CONNEXION AVEC LOGIN
+  // CONNEXION AVEC LA PAGE LOGIN
 
   function LancerPage2(){
     window.location.assign("index_2_login.html")

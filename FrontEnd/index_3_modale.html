@@ -73,15 +73,22 @@
 						<h2 class="Titre_modale_haut">Ajout Photo</h2>
 					</div>
 					<div class="Div_deposer">
-						<i class="fa-regular fa-image"></i>
-						<input type="file">
-						<p>jpg, png : 4mo max</p>
-					</div>
+						<i id="logo_paysage" class="fa-regular fa-image"></i>
+						<label class="affichage_bouton_depose">+ Ajouter photo</label>
+						<input id="bouton_depose" type="file">
+                        <p class="taille_max">jpg, png : 4mo max</p>
+					
+					 </div>
 					<form class="Div_form" action="#" method="post">
 						<label for="titre_nouveau_projet">Titre</label>
 						<input type="text" name="Titre" id="titre_nouveau_projet" tabindex="-1">
 						<label for="categorie_nouveau_projet">Catégorie</label>
-						<input type="select" name="categorie" id="categorie_nouveau_projet" tabindex="-1">
+						<select name="categorie" id="categorie_nouveau_projet" tabindex="-1">
+						  <option value="" disabled selected hidden>Choisir</option>	
+						  <option value="Objets">Objets</option>
+						  <option value="Appartement">Appartements</option>	
+						  <option value="Hotels & restaurants">Hotels & restaurants</option>
+					    </select>	
 					</form>
 					<div class="Div_envoie">
 						<input class="Bouton_dimension" id="envoie_projet" type="submit" value="Envoyer" tabindex="-1">
