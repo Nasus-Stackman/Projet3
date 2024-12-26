@@ -84,9 +84,11 @@ fetch(url)
       const imageElement = document.createElement("img");
       imageElement.src = element.imageUrl;
       const poubelle = document.createElement("button");
+      //création d'une classe poubelle pour le style css
       poubelle.classList.add("poubelle")
-      poubelle.innerHTML = '<i id="icone_poubelle" class="fa-solid fa-trash-can"></i'
-      poubelle.setAttribute("id", i)
+      poubelle.innerHTML = '<i class="fa-solid fa-trash-can"></i>'
+      //création id pour chaque icone de poubelle
+      poubelle.setAttribute("id", projets[i].id)
       article.appendChild(poubelle)
       article.appendChild(imageElement)
       imagesModale.appendChild(article)
@@ -95,25 +97,36 @@ fetch(url)
   }
   genererImages(projets);
   
-  // peut être créer un id différent à chaque fois
   
   // Récupération de la variable poubelle pour les futures suppressions
   
   const poubelle = document.querySelectorAll(".poubelle")
-  console.log(poubelle[4])
+  console.log(poubelle)
   
   //SUPPRESSION PROJETS
+  for (let i = 0; i < poubelle.length; i++){
+    poubelle[i].addEventListener("click", (event)=>{
+      //utilisation de currentTarget pour avoir l'ID du bouton dans son ensemble (et pas juste l'icone)
+      const charge_utile_suppression = parseInt(event.currentTarget.id)
+      console.log(charge_utile_suppression)
+      fetch(`http://localhost:5678/api/works/${charge_utile_suppression}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      })
+     
+    })
+  }
+  
+  //AJOUT PROJET
 
-  poubelle.addEventListener("click", function(){
-    const rappel = document.createElement("button")
-    rappel.textContent = ""
-  })
+  
 
-  fetch("http://localhost:5678/api/works/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: '{"commentaire": "Top produit !"}'
-  });
+
+  
+  
+  
+
+
 
 
 

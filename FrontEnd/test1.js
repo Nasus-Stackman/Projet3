@@ -14,36 +14,24 @@ const paquetConnexion = {
 
 
 const charge_utile = JSON.stringify(paquetConnexion)
-
-
-
+function requete(charge_utile){
   fetch("http://localhost:5678/api/users/login", {
-      method : "POST",
-      headers : { "Content-Type": "application/json" },
-      body : {charge_utile}
+    method : "POST",
+    headers : { "Content-Type": "application/json" },
+    body : {charge_utile}
   })
-
+}
+ 
+  
 
   let Connexion = document.getElementById("BoutonConnexion");
   Connexion.addEventListener("click", (event)=>{
     event.preventDefault();
-    const MessageErreur = document.querySelector(".erreur_message");
-    if(MessageErreur){
-      MessageErreur.remove()
-    }else{
-
-    }
+    requete(charge_utile);
     
     });
 
       
-// suppression
-
-fetch("http://localhost:5678/api/works/{id}"), {
-  method : "DELETE",
-  headers : { "Content-Type": "application/json" },
-  body : {charge_utile2}
-}
 
 
 
