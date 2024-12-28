@@ -87,8 +87,8 @@ fetch(url)
       //création d'une classe poubelle pour le style css
       poubelle.classList.add("poubelle")
       poubelle.innerHTML = '<i class="fa-solid fa-trash-can"></i>'
-      //création id pour chaque icone de poubelle
-      poubelle.setAttribute("id", projets[i].id)
+      //création id pour chaque icone de poubelle      ici element = projets[i]
+      poubelle.setAttribute("id", element.id)
       article.appendChild(poubelle)
       article.appendChild(imageElement)
       imagesModale.appendChild(article)
@@ -103,6 +103,9 @@ fetch(url)
   const poubelle = document.querySelectorAll(".poubelle")
   console.log(poubelle)
   
+  localStorage.getItem("le bro");
+  console.log()
+
   //SUPPRESSION PROJETS
   for (let i = 0; i < poubelle.length; i++){
     poubelle[i].addEventListener("click", (event)=>{
@@ -118,8 +121,37 @@ fetch(url)
   }
   
   //AJOUT PROJET
+  
+  const sauvegarde = window.localStorage.getItem("token_appel");
+  console.log(sauvegarde);
+
+  const nomNouveau = document.getElementById("titre_nouveau_projet");
+  const categorieNouveau = document.getElementById("categorie_nouveau_projet");
+  const ImageNouveau = document.getElementById("bouton_depose");
+  const Bouton_Envoie = document.getElementById("envoie_projet");
+
+  Bouton_Envoie.addEventListener("click", (event) => {
+    event.preventDefault();
+    const nouveauProjet = {
+      "title" : nomNouveau.value,
+      "imageUrl" : ImageNouveau.src,
+      "categoryId" : categorieNouveau.value
+    }
+    const charge_utile_ajout = JSON.stringify(nouveauProjet)
+    fetch("http://localhost:5678/api/works", {
+      method : "POST",
+      headers : { "Content-Type": "application/json" },
+      body : charge_utile_ajout
+    });
+  })
+
+
+
 
   
+
+  
+
 
 
   
