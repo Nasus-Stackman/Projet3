@@ -30,6 +30,7 @@ Connexion.addEventListener("click", (event)=>{
         console.log(Token1)
         const sauvegarde = window.localStorage.getItem("token_appel");
         console.log(sauvegarde)
+        Connecter();
       });
       
     }else{

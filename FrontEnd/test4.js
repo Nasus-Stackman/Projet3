@@ -48,3 +48,65 @@ Connexion.addEventListener("click", (event) => {
       Titre2.appendChild(MessageErreur);
     }
   });
+
+ //
+  
+ const nouveauProjet = {
+    "imageUrl" : formData,
+    "title" : nomNouveau.value,
+    "categoryId" : categorieNouveau.value
+  }
+  const charge_utile_ajout = JSON.stringify(nouveauProjet)
+  console.log(nouveauProjet)
+  fetch("http://localhost:5678/api/works", {
+    method : "POST",
+    headers : { "Content-Type": "application/json",
+                "Authorization": `Bearer ${sauvegarde}`
+     },
+    body : charge_utile_ajout
+  });
+
+
+
+  const imageAffiche = document.querySelector(".image_choisie");
+  imageAffiche.classList.add("VISIBLE");
+  ImageNouveau.classList.add("V");
+  const logo = document.getElementById("logo_paysage");
+  logo.classList.add("V");
+  const taille_max = document.querySelector(".taille_max");
+  taille_max.classList.add("V");
+  const affichage_bouton_depose = document.querySelector(".affichage_bouton_depose")
+  affichage_bouton_depose.classList.add("V");
+
+
+
+
+  ImageNouveau.addEventListener("change", (event)=>{
+    const formData = new FormData();
+    formData.append("userfile", ImageNouveau.files[0]);
+      Bouton_Envoie.addEventListener("click", (event) => {
+        console.log(formData)
+        event.preventDefault();
+        const nouveauProjet = {
+          "imageUrl" : formData,
+          "title" : nomNouveau.value,
+          "categoryId" : categorieNouveau.value
+        }
+        const charge_utile_ajout = JSON.stringify(nouveauProjet)
+        console.log(nouveauProjet)
+        fetch("http://localhost:5678/api/works", {
+          method : "POST",
+          headers : { "Content-Type": "application/json",
+                      "Authorization": `Bearer ${sauvegarde}`
+            },
+          body : charge_utile_ajout
+          });       
+          //affichage_image();
+        })  
+    }
+  ) 
+
+  const nomNouveau = document.getElementById("titre_nouveau_projet");
+    const categorieNouveau = document.getElementById("categorie_nouveau_projet");
+    const ImageNouveau = document.getElementById("bouton_depose");
+    const Bouton_Envoie = document.getElementById("envoie_projet");
