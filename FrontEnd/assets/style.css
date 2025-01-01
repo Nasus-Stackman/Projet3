@@ -208,6 +208,11 @@ button{
 button:hover{
 	color:#fffef8 ;
 	background-color: #1D6154;
+}
+
+button:active{
+	color:#fffef8 ;
+	background-color:red ;
 
 }
 
@@ -496,6 +501,7 @@ input[type="file"] {
 .Div_envoie{
 	display: flex;
 	justify-content: center;
+	flex-direction: column;
 	width: 66%;
 	margin-left: 17%;
 }
@@ -537,3 +543,11 @@ input[type="file"] {
 	background-color: red;
 	display: block;
 }
+
+.Div_envoie p{
+	color: red;
+	align-self: center;
+}
+
+/* temporaire*/
+

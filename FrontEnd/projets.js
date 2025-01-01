@@ -6,86 +6,147 @@ fetch(url)
   .then(data => {
     projets = data;
     console.log(projets)
-    
-  const images = document.querySelector(".gallery")   
-    // Après avoir récupéré les données, on peut itérer et ajouter les images au DOM.
-  function genererProjets(projets){
-    for (let i = 0; i < projets.length; i++) {
-      const element = projets[i];
-      const imageElement = document.createElement("img");
-      imageElement.src = element.imageUrl;
-      const titreElement = document.createElement("p");
-      titreElement.innerText = element.title
-      // on ratache
-      const article= document.createElement("article")
-      images.appendChild(article)
-      article.appendChild(imageElement)
-      article.appendChild(titreElement)
-    } 
-  }
-  genererProjets(projets);
-  
-  // Filtres
-  const bouton0 = document.createElement("button");
-  const bouton1 = document.createElement("button");
-  const bouton2 = document.createElement("button");
-  const bouton3 = document.createElement("button");
-  const Filtres = document.querySelector(".filtres");
+    genererProjets(projets);
+    trouverCategorie(projets);
+    genererImages(projets);
+  })
+  .catch(error => console.log(error));
 
-  bouton0.innerHTML = "Tous"
-  bouton0.addEventListener("click", function (){
-    document.querySelector(".gallery").innerHTML="";
+
+// Après avoir récupéré les données, on peut itérer et ajouter les images au DOM.
+function genererProjets(projets) {
+  const images = document.querySelector(".gallery")
+  images.innerHTML = ""
+  for (let i = 0; i < projets.length; i++) {
+    const element = projets[i];
+    const imageElement = document.createElement("img");
+    imageElement.src = element.imageUrl;
+    const titreElement = document.createElement("figcaption");
+    titreElement.innerText = element.title
+    // on ratache
+    const article = document.createElement("figure")
+    images.appendChild(article)
+    article.appendChild(imageElement)
+    article.appendChild(titreElement)
+  }
+}
+function trouverCategorie(projets) {
+  fetch("http://localhost:5678/api/categories")
+    .then(response => response.json())
+    .then(data => {
+
+      filtercategorie(data, projets)
+    }).catch(error => console.log(error));
+
+
+}
+function filtercategorie(categories, projets) {
+  const Filtres = document.querySelector(".filtres");
+  Filtres.innerHTML = "";
+  const bouton0 = document.createElement("button");
+  bouton0.textContent = "Tous"
+  bouton0.addEventListener("click", function () {
     genererProjets(projets);
   });
   Filtres.appendChild(bouton0)
+  categories.forEach(categorie => {
+    const bouton1 = document.createElement("button");
+    bouton1.textContent = categorie.name
+    bouton1.addEventListener("click", () => {
+      const filtrage = projets.filter(function(elem){
+        return elem.category.name === categorie.name
+      })
+      genererProjets(filtrage);
+    })
+    Filtres.appendChild(bouton1)
+  });
 
-  bouton1.innerHTML = "Objets"
-  bouton1.addEventListener("click", function (){
-    const projetsObjects = projets.filter(function(elem){
-      return elem.categoryId === 1;
-    });
-    console.log(projetsObjects)
-    document.querySelector(".gallery").innerHTML=""
-    genererProjets(projetsObjects);
-  });  
-  Filtres.appendChild(bouton1)
-  
-  bouton2.innerHTML = "Appartements"
-  bouton2.addEventListener("click", function (){
-    const projetsAppart = projets.filter(function(elem){
-      return elem.categoryId === 2;
-    });
-    console.log(projetsAppart)
-    document.querySelector(".gallery").innerHTML=""
-    genererProjets(projetsAppart);
-  });   
-  Filtres.appendChild(bouton2)
-  
-  bouton3.innerHTML = "Hotels & Restaurants"
-  bouton3.addEventListener("click", function (){
-    const projetsAppart = projets.filter(function(elem){
-      return elem.categoryId === 3;
-    });
-    console.log(projetsAppart)
-    document.querySelector(".gallery").innerHTML=""
-    genererProjets(projetsAppart);
-  });   
-  Filtres.appendChild(bouton3)
+}
 
-  // CONNEXION AVEC LA PAGE LOGIN
+// ACTIVATION DES BOUTONS
 
-  function LancerPage2(){
-    window.location.assign("index_2_login.html")
-  }
-  
-  const Login = document.querySelector(".login")
-  Login.addEventListener("click", function(){
-    LancerPage2()
-  })
+const boutons = document.querySelectorAll(".filtres button");
+for(i = 0; i < boutons.length; i++){
+  boutons[i].addEventListener("click", ()=>{
+    
 
 })
+}
 
-  
+// CHANGEMENTS STYLE HTML
+document.getElementById("logo_2").style.display = "none";
+const boutonLogout = document.querySelector(".logout");
+boutonLogout.classList.add("V");
+
+function VisuelEdition(){
+  // BOUTON LOGIN
+  const boutonLogin = document.querySelector(".login");
+  boutonLogin.classList.add("V");
+  boutonLogout.classList.remove("V");
+  // BANDE NOIRE
+  const ModeEdition = document.querySelector(".Mode_edition");
+  ModeEdition.classList.remove("V");
+  // ACCES MODALE
+  document.getElementById("logo_2").style.display = "inline";
+  const Modale = document.querySelector(".modale_js")
+  Modale.classList.remove("V")
+}
+VisuelEdition();
+
+  function VisuelStandard(){
+  // BOUTON LOGIN
+  const boutonLogin = document.querySelector(".login");
+  boutonLogin.classList.remove("V");
+  boutonLogout.classList.add("V");
+  // BANDE NOIRE
+  const ModeEdition = document.querySelector(".Mode_edition");
+  ModeEdition.classList.add("V");
+  // ACCES MODALE
+  document.getElementById("logo_2").style.display = "none";
+  const Modale = document.querySelector(".modale_js")
+  Modale.classList.add("V") 
+}
 
 
+// PROJETS DANS MODALE
 
+const imagesModale = document.querySelector(".Div_projets");
+function genererImages(projets) {
+  for (let i = 0; i < projets.length; i++) {
+    const element = projets[i];
+    const figure = document.createElement("figure");
+    figure.classList.add("article_image")
+    const imageElement = document.createElement("img");
+    imageElement.src = element.imageUrl;
+    const poubelle = document.createElement("button");
+    //création d'une classe poubelle pour le style css
+    poubelle.classList.add("poubelle");
+    poubelle.innerHTML = '<i class="fa-solid fa-trash-can"></i>'
+    //création id pour chaque icone de poubelle      ici element = projets[i]
+    poubelle.setAttribute("id", element.id);
+    figure.appendChild(poubelle);
+    figure.appendChild(imageElement);
+    imagesModale.appendChild(figure);
+    console.log(poubelle);
+  }
+}
+
+// TOKEN ET CONNEXION
+
+ const sauvegarde = window.localStorage.getItem("token_appel");
+ const boutonLogin = document.querySelector(".login")
+
+ // CONNEXION AVEC LA PAGE LOGIN
+
+function LancerPage2(){
+  window.location.assign("index_2_login.html")
+}
+ 
+boutonLogin.addEventListener("click", function(){
+  LancerPage2()
+})
+
+boutonLogout.addEventListener("click", ()=>{
+  window.localStorage.removeItem("token_appel");
+  VisuelStandard();
+})

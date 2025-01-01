@@ -127,19 +127,35 @@ fetch(url)
       })
     }
 
-    //AJOUT PROJET
-
-    
     // VISUEL IMAGE LOAD
-
+    
     function affichage_image() {
-      const Visuel = document.querySelector(".Div_deposer")
-      Visuel.innerHTML = '';
+      const Visuel = document.querySelector(".Div_deposer");
       const imageAffiche = document.querySelector(".image_choisie");
+      const logo = document.getElementById("logo_paysage").style.display = "none";
+      Visuel.classList.add("V")
       imageAffiche.classList.add("image_visible");
       imageAffiche.classList.remove("image_choisie");
+      const taille_max = document.querySelector(".taille_max");
+      taille_max.classList.add("V");
+      const texte = document.getElementById("texte_ajout").style.display = "none";
+      console.log(imageAffiche)
+      imageAffiche.classList.add("image_visible");
+      const bouton_depose = document.getElementById("bouton_depose").style.display = "none";
       console.log(imageAffiche)
     }
+    
+    function affichage_formulaire(){
+      const Visuel = document.querySelector(".Div_deposer");
+      const imageAffiche = document.querySelector(".image_choisie");
+      console.log(imageAffiche);
+      
+      console.log(imageAffiche)
+      
+    }
+    //AJOUT PROJET
+
+   
     document.getElementById("B").addEventListener('submit', function(event) {
       event.preventDefault(); // Empêche l'envoi classique du formulaire
       
@@ -157,7 +173,7 @@ fetch(url)
         categoryId = 1;
       } else if (categorieNouveau === 'Appartements') {
         categoryId = 2;
-      } else if (categorieNouveau === 'Hotels & restaurant') {
+      } else if (categorieNouveau === 'Hotels & restaurants') {
         categoryId = 3;
       }
       console.log(categoryId)
@@ -176,9 +192,27 @@ fetch(url)
           // 'Content-Type': 'multipart/form-data' n'est pas nécessaire car FormData gère cela automatiquement
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Réponse de l\'API:', data);
+      .then(response => {
+        if (response.ok){
+          response.json().then(data =>{})
+          affichage_image()
+        } else {
+          return response.json().then(data => {
+            // JE SUPPRIME L'ANCIEN MESSAGE D'ERREUR
+            const AncienMessage = document.querySelector(".Div_envoie p")
+            if( AncienMessage !== null){  
+              console.log(AncienMessage)
+              AncienMessage.remove()
+            }
+            const MessageErreur = document.createElement("p")
+            MessageErreur.innerText = "Erreur dans la sélection des champs"
+            const Titre2 = document.querySelector(".Div_envoie");
+            Titre2.appendChild(MessageErreur);
+            console.log(MessageErreur)
+            affichage_image()
+          });
+        }
+        
         // Ici, tu peux ajouter une action, comme afficher un message de succès ou réinitialiser le formulaire
       })
       .catch(error => {

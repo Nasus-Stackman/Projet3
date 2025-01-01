@@ -72,7 +72,7 @@ Connexion.addEventListener("click", (event) => {
   imageAffiche.classList.add("VISIBLE");
   ImageNouveau.classList.add("V");
   const logo = document.getElementById("logo_paysage");
-  logo.classList.add("V");
+  logo.setAttribute( "display : none;")
   const taille_max = document.querySelector(".taille_max");
   taille_max.classList.add("V");
   const affichage_bouton_depose = document.querySelector(".affichage_bouton_depose")
@@ -110,3 +110,57 @@ Connexion.addEventListener("click", (event) => {
     const categorieNouveau = document.getElementById("categorie_nouveau_projet");
     const ImageNouveau = document.getElementById("bouton_depose");
     const Bouton_Envoie = document.getElementById("envoie_projet");
+
+
+
+
+
+    // Filtres
+const bouton0 = document.createElement("button");
+const bouton1 = document.createElement("button");
+const bouton2 = document.createElement("button");
+const bouton3 = document.createElement("button");
+const Filtres = document.querySelector(".filtres");
+
+bouton0.innerHTML = "Tous"
+bouton0.addEventListener("click", function (){
+  document.querySelector(".gallery").innerHTML="";
+  genererProjets(projets);
+});
+Filtres.appendChild(bouton0)
+
+bouton1.innerHTML = "Objets"
+bouton1.addEventListener("click", function (){
+  const projetsObjects = projets.filter(function(elem){
+    return elem.categoryId === 1;
+  });
+  console.log(projetsObjects)
+  document.querySelector(".gallery").innerHTML=""
+  genererProjets(projetsObjects);
+});  
+Filtres.appendChild(bouton1)
+ 
+bouton2.innerHTML = "Appartements"
+bouton2.addEventListener("click", function (){
+  const projetsAppart = projets.filter(function(elem){
+    return elem.categoryId === 2;
+  });
+  console.log(projetsAppart)
+  document.querySelector(".gallery").innerHTML=""
+  genererProjets(projetsAppart);
+});   
+Filtres.appendChild(bouton2)
+ 
+bouton3.innerHTML = "Hotels & Restaurants"
+bouton3.addEventListener("click", function (){
+  const projetsAppart = projets.filter(function(elem){
+    return elem.categoryId === 3;
+  });
+  console.log(projetsAppart)
+  document.querySelector(".gallery").innerHTML=""
+  genererProjets(projetsAppart);
+});   
+Filtres.appendChild(bouton3)
+
+
+
