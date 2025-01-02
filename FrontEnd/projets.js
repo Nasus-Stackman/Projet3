@@ -9,6 +9,8 @@ fetch(url)
     genererProjets(projets);
     trouverCategorie(projets);
     genererImages(projets);
+    SupprimerProjets(projets);
+    AjoutProjet()
   })
   .catch(error => console.log(error));
 
@@ -53,7 +55,7 @@ function filtercategorie(categories, projets) {
     const bouton1 = document.createElement("button");
     bouton1.textContent = categorie.name
     bouton1.addEventListener("click", () => {
-      const filtrage = projets.filter(function(elem){
+      const filtrage = projets.filter(function (elem) {
         return elem.category.name === categorie.name
       })
       genererProjets(filtrage);
@@ -66,11 +68,11 @@ function filtercategorie(categories, projets) {
 // ACTIVATION DES BOUTONS
 
 const boutons = document.querySelectorAll(".filtres button");
-for(i = 0; i < boutons.length; i++){
-  boutons[i].addEventListener("click", ()=>{
-    
+for (i = 0; i < boutons.length; i++) {
+  boutons[i].addEventListener("click", () => {
 
-})
+
+  })
 }
 
 // CHANGEMENTS STYLE HTML
@@ -78,7 +80,7 @@ document.getElementById("logo_2").style.display = "none";
 const boutonLogout = document.querySelector(".logout");
 boutonLogout.classList.add("V");
 
-function VisuelEdition(){
+function VisuelEdition() {
   // BOUTON LOGIN
   const boutonLogin = document.querySelector(".login");
   boutonLogin.classList.add("V");
@@ -90,10 +92,13 @@ function VisuelEdition(){
   document.getElementById("logo_2").style.display = "inline";
   const Modale = document.querySelector(".modale_js")
   Modale.classList.remove("V")
+  // FILTRES
+   const Filtres = document.querySelector(".filtres");
+   Filtres.classList.add("V")
 }
 VisuelEdition();
 
-  function VisuelStandard(){
+function VisuelStandard() {
   // BOUTON LOGIN
   const boutonLogin = document.querySelector(".login");
   boutonLogin.classList.remove("V");
@@ -104,7 +109,10 @@ VisuelEdition();
   // ACCES MODALE
   document.getElementById("logo_2").style.display = "none";
   const Modale = document.querySelector(".modale_js")
-  Modale.classList.add("V") 
+  Modale.classList.add("V")
+   // FILTRES
+   const Filtres = document.querySelector(".filtres");
+   Filtres.classList.remove("V")
 }
 
 
@@ -133,20 +141,158 @@ function genererImages(projets) {
 
 // TOKEN ET CONNEXION
 
- const sauvegarde = window.localStorage.getItem("token_appel");
- const boutonLogin = document.querySelector(".login")
+const sauvegarde = window.localStorage.getItem("token_appel");
+const boutonLogin = document.querySelector(".login")
 
- // CONNEXION AVEC LA PAGE LOGIN
+// CONNEXION AVEC LA PAGE LOGIN
 
-function LancerPage2(){
+function LancerPage2() {
   window.location.assign("index_2_login.html")
 }
- 
-boutonLogin.addEventListener("click", function(){
+
+boutonLogin.addEventListener("click", function () {
   LancerPage2()
 })
 
-boutonLogout.addEventListener("click", ()=>{
+boutonLogout.addEventListener("click", () => {
   window.localStorage.removeItem("token_appel");
   VisuelStandard();
 })
+
+
+//SUPPRESSION PROJETS
+
+function SupprimerProjets(projets) {
+  const poubelle = document.querySelectorAll(".poubelle")
+  console.log(poubelle)
+  for (let i = 0; i < poubelle.length; i++) {
+    poubelle[i].addEventListener("click", (event) => {
+      event.preventDefault();
+      //utilisation de currentTarget pour avoir l'ID du bouton dans son ensemble (et pas juste l'icone)
+      const charge_utile_suppression = parseInt(event.currentTarget.id)
+      console.log(charge_utile_suppression)
+      fetch(`http://localhost:5678/api/works/${charge_utile_suppression}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${sauvegarde}`
+        },
+      })
+        .then(data => {
+          console.log('Réponse de l\'API:', data);
+          // Ici, tu peux ajouter une action, comme afficher un message de succès ou réinitialiser le formulaire
+        })
+    })
+  }
+
+}
+
+//AJOUT PROJET
+
+function AjoutProjet(){
+  document.getElementById("formulaire").addEventListener('submit', function(event) {
+    event.preventDefault(); // Empêche l'envoi classique du formulaire
+    
+    // Création FORMDATA depuis FORMULAIRE
+    const formData = new FormData();
+    
+    const nomNouveau = document.getElementById("titre_nouveau_projet").value
+    const categorieNouveau = document.getElementById("categorie_nouveau_projet").value
+    const ImageNouveau = document.getElementById("bouton_depose").files[0]
+    console.log(categorieNouveau)
+    // Ajouter dans FORMDATA
+    formData.append('title',  nomNouveau);
+    let categoryId;
+    if (categorieNouveau === 'Objets') {
+      categoryId = 1;
+    } else if (categorieNouveau === 'Appartements') {
+      categoryId = 2;
+    } else if (categorieNouveau === 'Hotels & restaurants') {
+      categoryId = 3;
+    }
+    console.log(categoryId)
+    console.log(nomNouveau)
+    console.log(ImageNouveau)
+    formData.append('category', categoryId);
+    formData.append('image', ImageNouveau);
+    // Reqûete
+    fetch('http://localhost:5678/api/works', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${sauvegarde}`,
+        // Les en-têtes doivent être définis pour indiquer qu'on envoie un formulaire multipart
+        'Accept': 'application/json', // Demander une réponse JSON
+        // 'Content-Type': 'multipart/form-data' n'est pas nécessaire car FormData gère cela automatiquement
+      }
+    })
+    .then(response => {
+      if (response.ok){
+        response.json().then(data =>{})  
+      } else {
+        return response.json().then(data => {
+          // JE SUPPRIME L'ANCIEN MESSAGE D'ERREUR
+          const AncienMessage = document.querySelector(".Div_envoie p")
+          if( AncienMessage !== null){  
+            console.log(AncienMessage)
+            AncienMessage.remove()
+          }
+          const MessageErreur = document.createElement("p")
+          MessageErreur.innerText = "Erreur dans la sélection des champs"
+          const Titre2 = document.querySelector(".Div_envoie");
+          Titre2.appendChild(MessageErreur);
+          console.log(MessageErreur)
+        });
+      }
+    })
+    .catch(error => {
+      console.error('Erreur lors de l\'envoi:', error);
+    });
+  });
+}
+
+AjoutImage = document.createElement("img")
+AjoutCategorie = 
+AjoutTitre = document.createElement("figcaption")
+
+
+
+// VISUEL IMAGE CHOISIE
+
+const bouton_depose = document.getElementById("bouton_depose")    
+bouton_depose.addEventListener('change', function(event) {
+  affichage_image(); 
+  const file = event.target.files[0]; // Obtenez le premier fichier
+  
+  if (file) {
+    const fileReader = new FileReader();
+
+    fileReader.onload = function(e) {
+      const NouvelleImage = document.createElement("img");
+      NouvelleImage.src = e.target.result; // Le résultat du FileReader est une Data URL
+      const imageAffiche = document.getElementById("texte_ajout");
+      imageAffiche.appendChild(NouvelleImage);
+      console.log(NouvelleImage);
+    };
+
+    fileReader.readAsDataURL(file); // Lire le fichier comme une Data URL
+  } else {
+    console.error('Aucun fichier sélectionné');
+  }
+});
+
+function affichage_image() {
+  const imageAffiche = document.querySelector(".image_choisie");
+  const logo = document.getElementById("logo_paysage").style.display = "none";
+ 
+  imageAffiche.classList.add("image_visible");
+  imageAffiche.classList.remove("image_choisie");
+  const taille_max = document.querySelector(".taille_max");
+  taille_max.classList.add("V");
+  const texte = document.getElementById("texte_ajout").style.display = "none";
+  console.log(imageAffiche)
+  imageAffiche.classList.add("image_visible");
+  const bouton_depose = document.getElementById("bouton_depose").style.display = "none";
+  console.log(imageAffiche)
+  
+}

@@ -534,13 +534,11 @@ input[type="file"] {
 	display: none;
 	height: 100%;
 	width: 40%;
-	background-color: red;
 }
 
 .image_visible{
 	height: 100%;
 	width: 40%;
-	background-color: red;
 	display: block;
 }
 
@@ -551,3 +549,6 @@ input[type="file"] {
 
 /* temporaire*/
 
+.temporaire{
+	background-color: #1D6154;
+}

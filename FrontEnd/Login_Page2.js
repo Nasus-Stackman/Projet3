@@ -4,7 +4,7 @@ let baliseEmail = document.getElementById("email_connexion");
 let baliseMdp = document.getElementById("motdepasse")
 
 function Connecter() {
-  window.location.assign("index_3_modale.html");
+  window.location.assign("index.html");
 }
 
 

@@ -15,7 +15,7 @@
         integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<script src="./projets.js" defer></script>
-	<script src="./Admin.js" defer></script>
+	
 
 </head>
 <body>
@@ -91,12 +91,12 @@
 							<div class="image_choisie">
 							</div>
 							<i id="logo_paysage" class="fa-regular fa-image"></i>
-							<label class="affichage_bouton_depose">+ Ajouter photo</label>
+							<label id="texte_ajout" class="affichage_bouton_depose">+ Ajouter photo</label>
 							<input id="bouton_depose" type="file" accept="image/*">
 							<p class="taille_max">jpg, png : 4mo max</p>
 
 						</div>
-						<form id="B" class="Div_form" action="#" method="post">
+						<form id="formulaire" class="Div_form" action="#" method="post">
 							<label for="titre_nouveau_projet">Titre</label>
 							<input type="text" name="Titre" id="titre_nouveau_projet" tabindex="-1">
 							<label for="categorie_nouveau_projet">Catégorie</label>

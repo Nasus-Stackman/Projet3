@@ -162,5 +162,18 @@ bouton3.addEventListener("click", function (){
 });   
 Filtres.appendChild(bouton3)
 
+if (file) {
+  const reader = new FileReader();
 
+  // Lorsque le fichier est chargé par le FileReader
+  reader.onload = function(e) {
+      // Mettre à jour l'élément img avec la source de l'image
+      imagePreview.src = e.target.result;
+      imagePreview.style.display = 'block'; // Afficher l'image
+  };
+
+  // Lire le fichier comme une URL de données
+  reader.readAsDataURL(file);
+}
+});
 

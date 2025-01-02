@@ -156,7 +156,7 @@ fetch(url)
     //AJOUT PROJET
 
    
-    document.getElementById("B").addEventListener('submit', function(event) {
+    document.getElementById("formulaire").addEventListener('submit', function(event) {
       event.preventDefault(); // Empêche l'envoi classique du formulaire
       
       // Créer un objet FormData à partir du formulaire
