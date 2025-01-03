@@ -1,10 +1,13 @@
 // connexion
 
+
+
 let baliseEmail = document.getElementById("email_connexion");
 let baliseMdp = document.getElementById("motdepasse")
 
 function Connecter() {
   window.location.assign("index.html");
+  
 }
 
 
@@ -26,9 +29,9 @@ Connexion.addEventListener("click", (event) => {
         // ON RECUPERE LE TOKEN
         response.json().then(data => {
           const Token1 = data.token;
-          window.localStorage.setItem("token_appel", Token1)
+          window.sessionStorage.setItem("token_appel", Token1)
           console.log(Token1)
-          const sauvegarde = window.localStorage.getItem("token_appel");
+          const sauvegarde = window.sessionStorage.getItem("token_appel");
           console.log(sauvegarde)
           Connecter();
         });

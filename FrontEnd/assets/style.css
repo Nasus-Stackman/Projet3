@@ -188,13 +188,29 @@ footer nav ul {
 
 /* TEST BOUTON */
 
+#portfolio{
+	margin-top: 100px;
+}
+
 .filtres{
 	margin-bottom: 20px;
 	height: 80px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	gap:10px;
+	gap: 10px;
+}
+
+.filtres button{
+	font-family: 'Syne';
+}
+
+#filtre1{
+	width: 155px;
+}
+
+#filtre2{
+	width: 200px; 
 }
 
 button{
@@ -208,12 +224,6 @@ button{
 button:hover{
 	color:#fffef8 ;
 	background-color: #1D6154;
-}
-
-button:active{
-	color:#fffef8 ;
-	background-color:red ;
-
 }
 
 /*LOG IN*/

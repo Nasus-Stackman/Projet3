@@ -51,9 +51,10 @@ function filtercategorie(categories, projets) {
     genererProjets(projets);
   });
   Filtres.appendChild(bouton0)
-  categories.forEach(categorie => {
+  categories.forEach((categorie, index) => {
     const bouton1 = document.createElement("button");
     bouton1.textContent = categorie.name
+    bouton1.setAttribute("id", "filtre"+index)
     bouton1.addEventListener("click", () => {
       const filtrage = projets.filter(function (elem) {
         return elem.category.name === categorie.name
@@ -68,21 +69,28 @@ function filtercategorie(categories, projets) {
 // ACTIVATION DES BOUTONS
 
 const boutons = document.querySelectorAll(".filtres button");
-for (i = 0; i < boutons.length; i++) {
-  boutons[i].addEventListener("click", () => {
-
+for ( let i = 0; i < boutons.length; i++) {
+  boutons[i].addEventListener("click", (e) => {
+    e.target.classList.add("temporaire")
+    console.log
 
   })
 }
 
 // CHANGEMENTS STYLE HTML
-document.getElementById("logo_2").style.display = "none";
+
+const boutonLogin = document.querySelector(".login");
+console.log(boutonLogin)
 const boutonLogout = document.querySelector(".logout");
-boutonLogout.classList.add("V");
+boutonLogin.classList.add("V");
 
 function VisuelEdition() {
+  document.getElementById("logo_2").style.display = "none";
+  const boutonLogout = document.querySelector(".logout");
+  boutonLogout.classList.add("V");
+
   // BOUTON LOGIN
-  const boutonLogin = document.querySelector(".login");
+  //const boutonLogin = document.querySelector(".login");
   boutonLogin.classList.add("V");
   boutonLogout.classList.remove("V");
   // BANDE NOIRE
@@ -96,11 +104,11 @@ function VisuelEdition() {
    const Filtres = document.querySelector(".filtres");
    Filtres.classList.add("V")
 }
-VisuelEdition();
 
 function VisuelStandard() {
+  const boutonLogout = document.querySelector(".logout");
   // BOUTON LOGIN
-  const boutonLogin = document.querySelector(".login");
+  //const boutonLogin = document.querySelector(".login");
   boutonLogin.classList.remove("V");
   boutonLogout.classList.add("V");
   // BANDE NOIRE
@@ -114,7 +122,18 @@ function VisuelStandard() {
    const Filtres = document.querySelector(".filtres");
    Filtres.classList.remove("V")
 }
+VisuelStandard();
 
+
+// TOKEN ET CONNEXION
+
+const sauvegarde = window.sessionStorage.getItem("token_appel");
+if(sauvegarde){
+  VisuelEdition();
+
+}else{
+  VisuelStandard();
+}
 
 // PROJETS DANS MODALE
 
@@ -138,11 +157,6 @@ function genererImages(projets) {
     console.log(poubelle);
   }
 }
-
-// TOKEN ET CONNEXION
-
-const sauvegarde = window.localStorage.getItem("token_appel");
-const boutonLogin = document.querySelector(".login")
 
 // CONNEXION AVEC LA PAGE LOGIN
 
@@ -189,7 +203,7 @@ function SupprimerProjets(projets) {
 
 //AJOUT PROJET
 
-function AjoutProjet(){
+function AjoutProjet(projets){
   document.getElementById("formulaire").addEventListener('submit', function(event) {
     event.preventDefault(); // Empêche l'envoi classique du formulaire
     
@@ -229,6 +243,23 @@ function AjoutProjet(){
     .then(response => {
       if (response.ok){
         response.json().then(data =>{})  
+         //création dynamique dans la modale
+        const AjoutImage = document.createElement("img");
+        AjoutImage.src = URL.createObjectURL(ImageNouveau);
+        const poubelle = document.createElement("button");
+        imagesModale.appendChild(AjoutImage);
+        //création dynamique dans la galerie
+        const AjoutImage2 = document.createElement("img");
+        AjoutImage2.src = URL.createObjectURL(ImageNouveau);
+        const article = document.createElement("figure");
+        const AjoutTitre = document.createElement("figcaption");
+        AjoutTitre.innerText = nomNouveau;
+        const images = document.querySelector(".gallery");
+        article.appendChild(AjoutImage2);
+        article.appendChild(AjoutTitre);
+        images.appendChild(article);
+
+
       } else {
         return response.json().then(data => {
           // JE SUPPRIME L'ANCIEN MESSAGE D'ERREUR
@@ -251,9 +282,6 @@ function AjoutProjet(){
   });
 }
 
-AjoutImage = document.createElement("img")
-AjoutCategorie = 
-AjoutTitre = document.createElement("figcaption")
 
 
 
@@ -261,18 +289,20 @@ AjoutTitre = document.createElement("figcaption")
 
 const bouton_depose = document.getElementById("bouton_depose")    
 bouton_depose.addEventListener('change', function(event) {
-  affichage_image(); 
+  
   const file = event.target.files[0]; // Obtenez le premier fichier
   
   if (file) {
     const fileReader = new FileReader();
-
+    
     fileReader.onload = function(e) {
-      const NouvelleImage = document.createElement("img");
-      NouvelleImage.src = e.target.result; // Le résultat du FileReader est une Data URL
-      const imageAffiche = document.getElementById("texte_ajout");
-      imageAffiche.appendChild(NouvelleImage);
-      console.log(NouvelleImage);
+      affichage_image()
+      const imageAffiche = document.createElement("img");
+      imageAffiche.classList.add("image_visible")
+      imageAffiche.src = e.target.result; // Le résultat du FileReader est une Data URL
+      const DivDepo = document.querySelector(".Div_deposer")
+      DivDepo.appendChild(imageAffiche);
+      console.log(imageAffiche);
     };
 
     fileReader.readAsDataURL(file); // Lire le fichier comme une Data URL
@@ -283,16 +313,21 @@ bouton_depose.addEventListener('change', function(event) {
 
 function affichage_image() {
   const imageAffiche = document.querySelector(".image_choisie");
+  //1
   const logo = document.getElementById("logo_paysage").style.display = "none";
- 
-  imageAffiche.classList.add("image_visible");
-  imageAffiche.classList.remove("image_choisie");
+  //2
+  const texte = document.getElementById("texte_ajout").style.display = "none";
+  //3
+  const bouton_depose = document.getElementById("bouton_depose").style.display = "none";
+  //4
   const taille_max = document.querySelector(".taille_max");
   taille_max.classList.add("V");
-  const texte = document.getElementById("texte_ajout").style.display = "none";
+  //IMAGE
   console.log(imageAffiche)
-  imageAffiche.classList.add("image_visible");
-  const bouton_depose = document.getElementById("bouton_depose").style.display = "none";
   console.log(imageAffiche)
+ 
+}
+
+function netoyer_image(){
   
 }
