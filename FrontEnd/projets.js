@@ -24,12 +24,12 @@ function genererProjets(projets) {
     const imageElement = document.createElement("img");
     imageElement.src = element.imageUrl;
     const titreElement = document.createElement("figcaption");
-    titreElement.innerText = element.title
+    titreElement.innerText = element.title;
     // on ratache
-    const article = document.createElement("figure")
-    images.appendChild(article)
-    article.appendChild(imageElement)
-    article.appendChild(titreElement)
+    const article = document.createElement("figure");
+    images.appendChild(article);
+    article.appendChild(imageElement);
+    article.appendChild(titreElement);
   }
 }
 function trouverCategorie(projets) {
@@ -54,7 +54,7 @@ function filtercategorie(categories, projets) {
   categories.forEach((categorie, index) => {
     const bouton1 = document.createElement("button");
     bouton1.textContent = categorie.name
-    bouton1.setAttribute("id", "filtre"+index)
+    bouton1.setAttribute("id", "filtre" + index)
     bouton1.addEventListener("click", () => {
       const filtrage = projets.filter(function (elem) {
         return elem.category.name === categorie.name
@@ -69,13 +69,12 @@ function filtercategorie(categories, projets) {
 // ACTIVATION DES BOUTONS
 
 const boutons = document.querySelectorAll(".filtres button");
-for ( let i = 0; i < boutons.length; i++) {
-  boutons[i].addEventListener("click", (e) => {
-    e.target.classList.add("temporaire")
-    console.log
+boutons.forEach((bouton) => {
+  bouton.addEventListener("click", () => {
+    console.log(bouton);
+  });
+});
 
-  })
-}
 
 // CHANGEMENTS STYLE HTML
 
@@ -101,8 +100,8 @@ function VisuelEdition() {
   const Modale = document.querySelector(".modale_js")
   Modale.classList.remove("V")
   // FILTRES
-   const Filtres = document.querySelector(".filtres");
-   Filtres.classList.add("V")
+  const Filtres = document.querySelector(".filtres");
+  Filtres.classList.add("V")
 }
 
 function VisuelStandard() {
@@ -118,9 +117,9 @@ function VisuelStandard() {
   document.getElementById("logo_2").style.display = "none";
   const Modale = document.querySelector(".modale_js")
   Modale.classList.add("V")
-   // FILTRES
-   const Filtres = document.querySelector(".filtres");
-   Filtres.classList.remove("V")
+  // FILTRES
+  const Filtres = document.querySelector(".filtres");
+  Filtres.classList.remove("V")
 }
 VisuelStandard();
 
@@ -128,10 +127,10 @@ VisuelStandard();
 // TOKEN ET CONNEXION
 
 const sauvegarde = window.sessionStorage.getItem("token_appel");
-if(sauvegarde){
+if (sauvegarde) {
   VisuelEdition();
 
-}else{
+} else {
   VisuelStandard();
 }
 
@@ -194,7 +193,18 @@ function SupprimerProjets(projets) {
       })
         .then(data => {
           console.log('Réponse de l\'API:', data);
-          // Ici, tu peux ajouter une action, comme afficher un message de succès ou réinitialiser le formulaire
+          // Suppression dynamique
+          const ProjetSupprimer = document.querySelectorAll(".gallery figure");
+          const ProjetModaleSupprimer = document.querySelectorAll(".Div_projets figure");
+          for (let i = 0; i < projets.length; i++) {
+            const element = projets[i]
+            const ID = element.id
+            console.log(ID)
+            if (ID === charge_utile_suppression) {
+              ProjetSupprimer[i].remove();
+              ProjetModaleSupprimer[i].remove();
+            }
+          }
         })
     })
   }
@@ -203,19 +213,19 @@ function SupprimerProjets(projets) {
 
 //AJOUT PROJET
 
-function AjoutProjet(projets){
-  document.getElementById("formulaire").addEventListener('submit', function(event) {
+function AjoutProjet(projets) {
+  document.getElementById("formulaire").addEventListener('submit', function (event) {
     event.preventDefault(); // Empêche l'envoi classique du formulaire
-    
+
     // Création FORMDATA depuis FORMULAIRE
     const formData = new FormData();
-    
+
     const nomNouveau = document.getElementById("titre_nouveau_projet").value
     const categorieNouveau = document.getElementById("categorie_nouveau_projet").value
     const ImageNouveau = document.getElementById("bouton_depose").files[0]
     console.log(categorieNouveau)
     // Ajouter dans FORMDATA
-    formData.append('title',  nomNouveau);
+    formData.append('title', nomNouveau);
     let categoryId;
     if (categorieNouveau === 'Objets') {
       categoryId = 1;
@@ -240,45 +250,45 @@ function AjoutProjet(projets){
         // 'Content-Type': 'multipart/form-data' n'est pas nécessaire car FormData gère cela automatiquement
       }
     })
-    .then(response => {
-      if (response.ok){
-        response.json().then(data =>{})  
-         //création dynamique dans la modale
-        const AjoutImage = document.createElement("img");
-        AjoutImage.src = URL.createObjectURL(ImageNouveau);
-        const poubelle = document.createElement("button");
-        imagesModale.appendChild(AjoutImage);
-        //création dynamique dans la galerie
-        const AjoutImage2 = document.createElement("img");
-        AjoutImage2.src = URL.createObjectURL(ImageNouveau);
-        const article = document.createElement("figure");
-        const AjoutTitre = document.createElement("figcaption");
-        AjoutTitre.innerText = nomNouveau;
-        const images = document.querySelector(".gallery");
-        article.appendChild(AjoutImage2);
-        article.appendChild(AjoutTitre);
-        images.appendChild(article);
+      .then(response => {
+        if (response.ok) {
+          response.json().then(data => { })
+          //création dynamique dans la modale
+          const AjoutImage = document.createElement("img");
+          AjoutImage.src = URL.createObjectURL(ImageNouveau);
+          const poubelle = document.createElement("button");
+          imagesModale.appendChild(AjoutImage);
+          //création dynamique dans la galerie
+          const AjoutImage2 = document.createElement("img");
+          AjoutImage2.src = URL.createObjectURL(ImageNouveau);
+          const article = document.createElement("figure");
+          const AjoutTitre = document.createElement("figcaption");
+          AjoutTitre.innerText = nomNouveau;
+          const images = document.querySelector(".gallery");
+          article.appendChild(AjoutImage2);
+          article.appendChild(AjoutTitre);
+          images.appendChild(article);
+          netoyer_image();
 
-
-      } else {
-        return response.json().then(data => {
-          // JE SUPPRIME L'ANCIEN MESSAGE D'ERREUR
-          const AncienMessage = document.querySelector(".Div_envoie p")
-          if( AncienMessage !== null){  
-            console.log(AncienMessage)
-            AncienMessage.remove()
-          }
-          const MessageErreur = document.createElement("p")
-          MessageErreur.innerText = "Erreur dans la sélection des champs"
-          const Titre2 = document.querySelector(".Div_envoie");
-          Titre2.appendChild(MessageErreur);
-          console.log(MessageErreur)
-        });
-      }
-    })
-    .catch(error => {
-      console.error('Erreur lors de l\'envoi:', error);
-    });
+        } else {
+          return response.json().then(data => {
+            // JE SUPPRIME L'ANCIEN MESSAGE D'ERREUR
+            const AncienMessage = document.querySelector(".Div_envoie p")
+            if (AncienMessage !== null) {
+              console.log(AncienMessage)
+              AncienMessage.remove()
+            }
+            const MessageErreur = document.createElement("p")
+            MessageErreur.innerText = "Erreur dans la sélection des champs"
+            const Titre2 = document.querySelector(".Div_envoie");
+            Titre2.appendChild(MessageErreur);
+            console.log(MessageErreur)
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Erreur lors de l\'envoi:', error);
+      });
   });
 }
 
@@ -287,15 +297,15 @@ function AjoutProjet(projets){
 
 // VISUEL IMAGE CHOISIE
 
-const bouton_depose = document.getElementById("bouton_depose")    
-bouton_depose.addEventListener('change', function(event) {
-  
+const bouton_depose = document.getElementById("bouton_depose")
+bouton_depose.addEventListener('change', function (event) {
+
   const file = event.target.files[0]; // Obtenez le premier fichier
-  
+
   if (file) {
     const fileReader = new FileReader();
-    
-    fileReader.onload = function(e) {
+
+    fileReader.onload = function (e) {
       affichage_image()
       const imageAffiche = document.createElement("img");
       imageAffiche.classList.add("image_visible")
@@ -324,10 +334,23 @@ function affichage_image() {
   taille_max.classList.add("V");
   //IMAGE
   console.log(imageAffiche)
-  console.log(imageAffiche)
- 
+
 }
 
-function netoyer_image(){
-  
+function netoyer_image() {
+  const imageAffiche = document.querySelector(".image_choisie").style.display = "none";
+  //1
+  const logo = document.getElementById("logo_paysage").style.display = "";
+  //2
+  const texte = document.getElementById("texte_ajout").style.display = "";
+  //3
+  const bouton_depose = document.getElementById("bouton_depose").style.display = "";
+  //4
+  const taille_max = document.querySelector(".taille_max");
+  taille_max.classList.remove("V");
+  //IMAGE
+  const ImageNouvelle = document.querySelector(".Div_deposer img");
+  ImageNouvelle.remove();
+  console.log(ImageNouvelle);
+
 }
