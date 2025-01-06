@@ -196,3 +196,105 @@ AjoutImage.src = ImageNouveau
 
 //AjoutCategorie = ;
 const AjoutTitre = document.createElement("figcaption")
+
+
+const poubelle = document.createElement("button");
+            poubelle.classList.add("poubelle");
+            poubelle.innerHTML = '<i class="fa-solid fa-trash-can"></i>'
+            //récupération de l'id
+            poubelle.setAttribute("id", IdNouveau);
+            article.appendChild(poubelle)
+
+            <aside id="modale1" class="modale" aria-hidden="true" role="dialog" aria-labelledby="Titre_modale"
+					style="display: none;" aria-modal="false">
+
+
+boutons.forEach(b => b.classList.remove("flitre_click"));
+      boutons[i].classList.add("flitre_click");
+    });
+
+
+    function AjoutProjet(projets) {
+  document.getElementById("formulaire").addEventListener('submit', function (event) {
+    event.preventDefault(); 
+
+    // Création FORMDATA depuis FORMULAIRE
+    const formData = new FormData();
+
+    const nomNouveau = document.getElementById("titre_nouveau_projet").value
+    const categorieNouveau = document.getElementById("categorie_nouveau_projet").value
+    const ImageNouveau = document.getElementById("bouton_depose").files[0]
+    console.log(categorieNouveau)
+    // Ajouter dans FORMDATA
+    formData.append('title', nomNouveau);
+    let categoryId;
+    if (categorieNouveau === 'Objets') {
+      categoryId = 1;
+    } else if (categorieNouveau === 'Appartements') {
+      categoryId = 2;
+    } else if (categorieNouveau === 'Hotels & restaurants') {
+      categoryId = 3;
+    }
+    console.log(categoryId)
+    console.log(nomNouveau)
+    console.log(ImageNouveau)
+    formData.append('category', categoryId);
+    if(ImageNouveau !== undefined){
+      formData.append('image', ImageNouveau);
+    }else{
+      console.log("pas d'image sélectionnée")
+    }
+    // Reqûete
+    fetch('http://localhost:5678/api/works', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${sauvegarde}`,
+        // Les en-têtes doivent être définis pour indiquer qu'on envoie un formulaire multipart
+        'Accept': 'application/json', // Demander une réponse JSON
+        // 'Content-Type': 'multipart/form-data' n'est pas nécessaire car FormData gère cela automatiquement
+      }
+    })
+      .then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            const IdNouveau = data.id; // Récupère l'ID unique
+            console.log("ID du projet créé:", IdNouveau);
+            //création dynamique dans la modale
+            const article = document.createElement("figure");
+            const AjoutImage = document.createElement("img");
+            AjoutImage.src = URL.createObjectURL(ImageNouveau);
+            imagesModale.appendChild(AjoutImage);
+            //création dynamique dans la galerie
+            const AjoutImage2 = document.createElement("img");
+            AjoutImage2.src = URL.createObjectURL(ImageNouveau);
+            const AjoutTitre = document.createElement("figcaption");
+            AjoutTitre.innerText = nomNouveau;
+            const images = document.querySelector(".gallery");
+            article.appendChild(AjoutImage2);
+            article.appendChild(AjoutTitre);
+            images.appendChild(article);
+            netoyer_image();
+          })
+
+        } else {
+          return response.json().then(data => {
+            // JE SUPPRIME L'ANCIEN MESSAGE D'ERREUR
+            const AncienMessage = document.querySelector(".Div_envoie p")
+            if (AncienMessage !== null) {
+              console.log(AncienMessage)
+              AncienMessage.remove()
+            }
+            const MessageErreur = document.createElement("p")
+            MessageErreur.innerText = "Erreur dans la sélection des champs"
+            const Titre2 = document.querySelector(".Div_envoie");
+            Titre2.appendChild(MessageErreur);
+            console.log(MessageErreur)
+          });
+        }
+      })
+      .catch(error => {
+        console.error('Erreur lors de l\'envoi:', error);
+      });
+  });
+}

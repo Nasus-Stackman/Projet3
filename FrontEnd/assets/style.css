@@ -559,6 +559,13 @@ input[type="file"] {
 
 /* temporaire*/
 
-.temporaire{
+.flitre_click{
+	color:#fffef8 ;
 	background-color: #1D6154;
 }
+
+.filtre_non_click{
+	color:#fffef8 ;
+	background-color: #1D6154;
+}
+

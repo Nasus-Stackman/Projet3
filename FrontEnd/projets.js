@@ -63,17 +63,17 @@ function filtercategorie(categories, projets) {
     })
     Filtres.appendChild(bouton1)
   });
-
+  // ACTIVATION DES BOUTONS
+  const boutons = document.querySelectorAll(".filtres button");
+  boutons.forEach(bouton => {
+    bouton.addEventListener("click", () => {
+      boutons.forEach(b => b.classList.remove("flitre_click"));
+      bouton.classList.add("flitre_click");
+    });
+  });
 }
 
-// ACTIVATION DES BOUTONS
 
-const boutons = document.querySelectorAll(".filtres button");
-boutons.forEach((bouton) => {
-  bouton.addEventListener("click", () => {
-    console.log(bouton);
-  });
-});
 
 
 // CHANGEMENTS STYLE HTML
@@ -215,8 +215,8 @@ function SupprimerProjets(projets) {
 
 function AjoutProjet(projets) {
   document.getElementById("formulaire").addEventListener('submit', function (event) {
-    event.preventDefault(); // Empêche l'envoi classique du formulaire
-
+    event.preventDefault();
+    
     // Création FORMDATA depuis FORMULAIRE
     const formData = new FormData();
 
@@ -238,59 +238,65 @@ function AjoutProjet(projets) {
     console.log(nomNouveau)
     console.log(ImageNouveau)
     formData.append('category', categoryId);
-    formData.append('image', ImageNouveau);
-    // Reqûete
-    fetch('http://localhost:5678/api/works', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Authorization': `Bearer ${sauvegarde}`,
-        // Les en-têtes doivent être définis pour indiquer qu'on envoie un formulaire multipart
-        'Accept': 'application/json', // Demander une réponse JSON
-        // 'Content-Type': 'multipart/form-data' n'est pas nécessaire car FormData gère cela automatiquement
-      }
-    })
-      .then(response => {
-        if (response.ok) {
-          response.json().then(data => { })
-          //création dynamique dans la modale
-          const AjoutImage = document.createElement("img");
-          AjoutImage.src = URL.createObjectURL(ImageNouveau);
-          const poubelle = document.createElement("button");
-          imagesModale.appendChild(AjoutImage);
-          //création dynamique dans la galerie
-          const AjoutImage2 = document.createElement("img");
-          AjoutImage2.src = URL.createObjectURL(ImageNouveau);
-          const article = document.createElement("figure");
-          const AjoutTitre = document.createElement("figcaption");
-          AjoutTitre.innerText = nomNouveau;
-          const images = document.querySelector(".gallery");
-          article.appendChild(AjoutImage2);
-          article.appendChild(AjoutTitre);
-          images.appendChild(article);
-          netoyer_image();
-
-        } else {
-          return response.json().then(data => {
-            // JE SUPPRIME L'ANCIEN MESSAGE D'ERREUR
-            const AncienMessage = document.querySelector(".Div_envoie p")
-            if (AncienMessage !== null) {
-              console.log(AncienMessage)
-              AncienMessage.remove()
-            }
-            const MessageErreur = document.createElement("p")
-            MessageErreur.innerText = "Erreur dans la sélection des champs"
-            const Titre2 = document.querySelector(".Div_envoie");
-            Titre2.appendChild(MessageErreur);
-            console.log(MessageErreur)
-          });
+    if (ImageNouveau !== undefined && ImageNouveau !== null) {
+      formData.append('image', ImageNouveau);
+      // Reqûete
+      fetch('http://localhost:5678/api/works', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Authorization': `Bearer ${sauvegarde}`,
+          // Les en-têtes doivent être définis pour indiquer qu'on envoie un formulaire multipart
+          'Accept': 'application/json', // Demander une réponse JSON
+          // 'Content-Type': 'multipart/form-data' n'est pas nécessaire car FormData gère cela automatiquement
         }
       })
-      .catch(error => {
-        console.error('Erreur lors de l\'envoi:', error);
-      });
+        .then(response => {
+          if (response.ok) {
+            response.json().then(data => {
+              const fileInput = document.getElementById("bouton_depose");
+              fileInput.value = ''; 
+              const IdNouveau = data.id; // Récupère l'ID unique
+              console.log("ID du projet créé:", IdNouveau);
+              //création dynamique dans la modale
+              const article = document.createElement("figure");
+              const AjoutImage = document.createElement("img");
+              AjoutImage.src = URL.createObjectURL(ImageNouveau);
+              imagesModale.appendChild(AjoutImage);
+              //création dynamique dans la galerie
+              const AjoutImage2 = document.createElement("img");
+              AjoutImage2.src = URL.createObjectURL(ImageNouveau);
+              const AjoutTitre = document.createElement("figcaption");
+              AjoutTitre.innerText = nomNouveau;
+              const images = document.querySelector(".gallery");
+              article.appendChild(AjoutImage2);
+              article.appendChild(AjoutTitre);
+              images.appendChild(article);
+              netoyer_image();
+            })
+          } else {
+            return response.json().then(data => { });
+          }
+        })
+        .catch(error => {
+          console.error('Erreur lors de l\'envoi:', error);
+        })
+    } else {
+      // JE SUPPRIME L'ANCIEN MESSAGE D'ERREUR
+      const AncienMessage = document.querySelector(".Div_envoie p")
+      if (AncienMessage !== null) {
+        console.log(AncienMessage)
+        AncienMessage.remove()
+      }
+      const MessageErreur = document.createElement("p")
+      MessageErreur.innerText = "Erreur dans la sélection des champs"
+      const Titre2 = document.querySelector(".Div_envoie");
+      Titre2.appendChild(MessageErreur);
+      console.log(MessageErreur)
+    }
   });
 }
+
 
 
 
@@ -312,7 +318,6 @@ bouton_depose.addEventListener('change', function (event) {
       imageAffiche.src = e.target.result; // Le résultat du FileReader est une Data URL
       const DivDepo = document.querySelector(".Div_deposer")
       DivDepo.appendChild(imageAffiche);
-      console.log(imageAffiche);
     };
 
     fileReader.readAsDataURL(file); // Lire le fichier comme une Data URL
@@ -351,6 +356,5 @@ function netoyer_image() {
   //IMAGE
   const ImageNouvelle = document.querySelector(".Div_deposer img");
   ImageNouvelle.remove();
-  console.log(ImageNouvelle);
 
 }
