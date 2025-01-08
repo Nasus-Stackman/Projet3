@@ -265,16 +265,24 @@ function AjoutProjet(categories) {
         .then(response => {
           if (response.ok) {
             response.json().then(data => {
+              projets.push(data);
               const AncienMessage = document.querySelector(".Div_envoie p")
               if (AncienMessage !== null) {
                 console.log(AncienMessage)
                 AncienMessage.remove()
               }
+              //je vide les champs
+              const fileInput = document.getElementById("bouton_depose");
+              fileInput.value = '';
+              const TitreInput = document.getElementById("titre_nouveau_projet");
+              TitreInput.value = '';
+              const CategorieInput = document.getElementById("categorie_nouveau_projet");
+              CategorieInput.value = '';
               document.querySelector(".Div_projets").innerHTML = '';
               document.querySelector(".gallery").innerHTML = '';
-              console.log(projets)
               genererImages(projets);
               genererProjets(projets);
+              SupprimerProjets(projets);
               netoyer_image();
             })
           } else {
