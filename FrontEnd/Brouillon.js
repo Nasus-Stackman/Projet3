@@ -298,3 +298,162 @@ boutons.forEach(b => b.classList.remove("flitre_click"));
       });
   });
 }
+
+
+
+function SupprimerProjets(projets) {
+  const poubelle = document.querySelectorAll(".poubelle")
+  console.log(poubelle)
+  for (let i = 0; i < poubelle.length; i++) {
+    poubelle[i].addEventListener("click", (event) => {
+      event.preventDefault();
+      //utilisation de currentTarget pour avoir l'ID du bouton dans son ensemble (et pas juste l'icone)
+      const charge_utile_suppression = parseInt(event.currentTarget.id)
+      console.log(charge_utile_suppression)
+      fetch(`http://localhost:5678/api/works/${charge_utile_suppression}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${sauvegarde}`
+        },
+      })
+        .then(data => {
+          console.log('Réponse de l\'API:', data);
+          // Suppression dynamique
+          const ProjetSupprimer = document.querySelectorAll(".gallery figure");
+          const ProjetModaleSupprimer = document.querySelectorAll(".Div_projets figure");
+          for (let j = 0; j < projets.length; j++) {
+            const element = projets[j]
+            const ID = element.id
+            console.log(ID)
+            if (ID === charge_utile_suppression) {
+              ProjetSupprimer[j].remove();
+              ProjetModaleSupprimer[j].remove();
+            }
+          }
+        })
+    })
+  }
+}
+
+
+function SupprimerProjets(projets) {
+  const poubelle = document.querySelectorAll(".poubelle")
+  console.log(poubelle)
+  for (let i = 0; i < poubelle.length; i++) {
+    poubelle[i].addEventListener("click", (event) => {
+      event.preventDefault();
+      //utilisation de currentTarget pour avoir l'ID du bouton dans son ensemble (et pas juste l'icone)
+      const charge_utile_suppression = parseInt(event.currentTarget.id)
+      console.log(charge_utile_suppression)
+      fetch(`http://localhost:5678/api/works/${charge_utile_suppression}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${sauvegarde}`
+        },
+      })
+        .then(data => {
+          const newData = data;
+          console.log('Réponse de l\'API:', newData);
+          // Suppression dynamique
+          const ProjetSupprimer = document.querySelectorAll(".gallery figure");
+          const ProjetModaleSupprimer = document.querySelectorAll(".Div_projets figure");
+          const element = projets[i]
+          console.log(projets)
+          const ID = element.id
+          console.log(ID)
+          if (ID === charge_utile_suppression) {
+            console.log(i)
+            console.log(ProjetSupprimer[i])
+            console.log(projets.length)
+            ProjetSupprimer[i].remove();
+            ProjetModaleSupprimer[i].remove();
+          }
+        })
+
+    })
+  }
+}
+
+
+
+// categorie
+
+let categoryId;
+    if (categorieNouveau === 'Objets') {
+      categoryId = 1;
+    } else if (categorieNouveau === 'Appartements') {
+      categoryId = 2;
+    } else if (categorieNouveau === 'Hotels & restaurants') {
+      categoryId = 3;
+    }
+
+
+
+function Select(categories) {
+  const InputCategorie = document.createElement("select");
+  InputCategorie.classList.add("test");
+
+  for (let i = 0; i < categories.length; i++) {
+    const Option = document.createElement("option");
+    Option.value = categories[i].id; // Utilisez categories[i].id
+    Option.textContent = categories[i].name; // Utilisez categories[i].name
+    InputCategorie.appendChild(Option); // Ajoutez l'option à select
+  }
+
+  console.log(InputCategorie);
+
+  const Div_form = document.querySelector(".Div_form");
+  Div_form.appendChild(InputCategorie);
+}
+
+
+
+
+let categoryId;
+
+
+
+
+categorieNouveau === category.id
+
+
+<select name="categorie" id="categorie_nouveau_projet" tabindex="-1">
+								<option id="bouton_choisir" value="" disabled selected hidden>Choisir</option>
+								<option value="Objets">Objets</option>
+								<option value="Appartements">Appartements</option>
+								<option value="Hotels & restaurants">Hotels & restaurants</option>
+							</select>
+
+              //je vide l'input file 
+              const fileInput = document.getElementById("bouton_depose");
+              fileInput.value = '';
+              const TitreInput = document.getElementById("titre_nouveau_projet");
+              TitreInput.value = '';
+              const IdNouveau = data.id; // Récupère l'ID unique
+              console.log("ID du projet créé:", IdNouveau);
+              //création dynamique dans la modale
+              const figure = document.createElement("figure");
+              figure.classList.add("article_image")
+              const AjoutImage = document.createElement("img");
+              AjoutImage.src = URL.createObjectURL(ImageNouveau);
+              const poubelle = document.createElement("button");
+              poubelle.innerHTML = '<i class="fa-solid fa-trash-can"></i>'
+              poubelle.classList.add("poubelle");
+              //création id pour la nouvelle poubelle
+              poubelle.setAttribute("id", IdNouveau);
+              figure.appendChild(poubelle);
+              figure.appendChild(AjoutImage);
+              const imagesModale = document.querySelector(".Div_projets");
+              imagesModale.appendChild(figure);
+              //création dynamique dans la galerie
+              const AjoutImage2 = document.createElement("img");
+              AjoutImage2.src = URL.createObjectURL(ImageNouveau);
+              const figure2 = document.createElement("figure");
+              const AjoutTitre = document.createElement("figcaption");
+              AjoutTitre.innerText = nomNouveau;
+              const images = document.querySelector(".gallery");
+              figure2.appendChild(AjoutImage2);
+              figure2.appendChild(AjoutTitre);
+              images.appendChild(figure2);

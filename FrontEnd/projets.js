@@ -9,8 +9,8 @@ fetch(url)
     genererProjets(projets);
     trouverCategorie(projets);
     genererImages(projets);
+
     SupprimerProjets(projets);
-    AjoutProjet()
   })
   .catch(error => console.log(error));
 
@@ -30,6 +30,7 @@ function genererProjets(projets) {
     images.appendChild(article);
     article.appendChild(imageElement);
     article.appendChild(titreElement);
+    console.log(element.id)
   }
 }
 function trouverCategorie(projets) {
@@ -38,6 +39,8 @@ function trouverCategorie(projets) {
     .then(data => {
 
       filtercategorie(data, projets)
+      Select(data)
+      AjoutProjet(data);
     }).catch(error => console.log(error));
 
 
@@ -63,7 +66,7 @@ function filtercategorie(categories, projets) {
     })
     Filtres.appendChild(bouton1)
   });
-  // ACTIVATION DES BOUTONS
+  // ACTIVATION DU CSS DES BOUTONS
   const boutons = document.querySelectorAll(".filtres button");
   boutons.forEach(bouton => {
     bouton.addEventListener("click", () => {
@@ -129,15 +132,14 @@ VisuelStandard();
 const sauvegarde = window.sessionStorage.getItem("token_appel");
 if (sauvegarde) {
   VisuelEdition();
-
 } else {
   VisuelStandard();
 }
 
 // PROJETS DANS MODALE
 
-const imagesModale = document.querySelector(".Div_projets");
 function genererImages(projets) {
+  const imagesModale = document.querySelector(".Div_projets");
   for (let i = 0; i < projets.length; i++) {
     const element = projets[i];
     const figure = document.createElement("figure");
@@ -168,7 +170,7 @@ boutonLogin.addEventListener("click", function () {
 })
 
 boutonLogout.addEventListener("click", () => {
-  window.localStorage.removeItem("token_appel");
+  window.sessionStorage.removeItem("token_appel");
   VisuelStandard();
 })
 
@@ -176,14 +178,16 @@ boutonLogout.addEventListener("click", () => {
 //SUPPRESSION PROJETS
 
 function SupprimerProjets(projets) {
-  const poubelle = document.querySelectorAll(".poubelle")
-  console.log(poubelle)
+  const poubelle = document.querySelectorAll(".poubelle");
+  console.log(poubelle);
+
   for (let i = 0; i < poubelle.length; i++) {
     poubelle[i].addEventListener("click", (event) => {
       event.preventDefault();
-      //utilisation de currentTarget pour avoir l'ID du bouton dans son ensemble (et pas juste l'icone)
-      const charge_utile_suppression = parseInt(event.currentTarget.id)
-      console.log(charge_utile_suppression)
+
+      const charge_utile_suppression = parseInt(event.currentTarget.id);
+      console.log(charge_utile_suppression);
+
       fetch(`http://localhost:5678/api/works/${charge_utile_suppression}`, {
         method: "DELETE",
         headers: {
@@ -193,30 +197,45 @@ function SupprimerProjets(projets) {
       })
         .then(data => {
           console.log('Réponse de l\'API:', data);
-          // Suppression dynamique
+
+          // Chercher l'élément à supprimer en fonction de l'ID
           const ProjetSupprimer = document.querySelectorAll(".gallery figure");
           const ProjetModaleSupprimer = document.querySelectorAll(".Div_projets figure");
-          for (let i = 0; i < projets.length; i++) {
-            const element = projets[i]
-            const ID = element.id
-            console.log(ID)
-            if (ID === charge_utile_suppression) {
-              ProjetSupprimer[i].remove();
-              ProjetModaleSupprimer[i].remove();
+
+          // Trouver l'élément dans le tableau projets avec le même ID
+          const element = projets.find((p) => p.id === charge_utile_suppression);
+          if (element) {
+            console.log("Projet à supprimer:", element);
+
+            // Trouver les éléments dans le DOM à supprimer
+            const indexToRemove = projets.indexOf(element); // Trouver l'index de l'élément dans le tableau
+
+            // Supprimer les éléments du DOM
+            if (ProjetSupprimer[indexToRemove]) {
+              ProjetSupprimer[indexToRemove].remove();
             }
+            if (ProjetModaleSupprimer[indexToRemove]) {
+              ProjetModaleSupprimer[indexToRemove].remove();
+            }
+
+            // Supprimer l'élément du tableau projets
+            projets.splice(indexToRemove, 1);
+            console.log("Projet supprimé de 'projets':", element);
           }
         })
-    })
+        .catch(error => {
+          console.error("Erreur lors de la suppression:", error);
+        });
+    });
   }
-
 }
 
 //AJOUT PROJET
 
-function AjoutProjet(projets) {
+function AjoutProjet(categories) {
   document.getElementById("formulaire").addEventListener('submit', function (event) {
     event.preventDefault();
-    
+
     // Création FORMDATA depuis FORMULAIRE
     const formData = new FormData();
 
@@ -226,19 +245,11 @@ function AjoutProjet(projets) {
     console.log(categorieNouveau)
     // Ajouter dans FORMDATA
     formData.append('title', nomNouveau);
-    let categoryId;
-    if (categorieNouveau === 'Objets') {
-      categoryId = 1;
-    } else if (categorieNouveau === 'Appartements') {
-      categoryId = 2;
-    } else if (categorieNouveau === 'Hotels & restaurants') {
-      categoryId = 3;
-    }
-    console.log(categoryId)
-    console.log(nomNouveau)
     console.log(ImageNouveau)
-    formData.append('category', categoryId);
-    if (ImageNouveau !== undefined && ImageNouveau !== null) {
+    console.log(nomNouveau)
+    console.log(categorieNouveau)
+    formData.append('category', categorieNouveau);
+    if (ImageNouveau !== undefined && ImageNouveau !== null && nomNouveau !== "" && categorieNouveau !== undefined) {
       formData.append('image', ImageNouveau);
       // Reqûete
       fetch('http://localhost:5678/api/works', {
@@ -254,24 +265,16 @@ function AjoutProjet(projets) {
         .then(response => {
           if (response.ok) {
             response.json().then(data => {
-              const fileInput = document.getElementById("bouton_depose");
-              fileInput.value = ''; 
-              const IdNouveau = data.id; // Récupère l'ID unique
-              console.log("ID du projet créé:", IdNouveau);
-              //création dynamique dans la modale
-              const article = document.createElement("figure");
-              const AjoutImage = document.createElement("img");
-              AjoutImage.src = URL.createObjectURL(ImageNouveau);
-              imagesModale.appendChild(AjoutImage);
-              //création dynamique dans la galerie
-              const AjoutImage2 = document.createElement("img");
-              AjoutImage2.src = URL.createObjectURL(ImageNouveau);
-              const AjoutTitre = document.createElement("figcaption");
-              AjoutTitre.innerText = nomNouveau;
-              const images = document.querySelector(".gallery");
-              article.appendChild(AjoutImage2);
-              article.appendChild(AjoutTitre);
-              images.appendChild(article);
+              const AncienMessage = document.querySelector(".Div_envoie p")
+              if (AncienMessage !== null) {
+                console.log(AncienMessage)
+                AncienMessage.remove()
+              }
+              document.querySelector(".Div_projets").innerHTML = '';
+              document.querySelector(".gallery").innerHTML = '';
+              console.log(projets)
+              genererImages(projets);
+              genererProjets(projets);
               netoyer_image();
             })
           } else {
@@ -292,12 +295,9 @@ function AjoutProjet(projets) {
       MessageErreur.innerText = "Erreur dans la sélection des champs"
       const Titre2 = document.querySelector(".Div_envoie");
       Titre2.appendChild(MessageErreur);
-      console.log(MessageErreur)
     }
   });
 }
-
-
 
 
 
@@ -338,8 +338,6 @@ function affichage_image() {
   const taille_max = document.querySelector(".taille_max");
   taille_max.classList.add("V");
   //IMAGE
-  console.log(imageAffiche)
-
 }
 
 function netoyer_image() {
@@ -356,5 +354,29 @@ function netoyer_image() {
   //IMAGE
   const ImageNouvelle = document.querySelector(".Div_deposer img");
   ImageNouvelle.remove();
+}
 
+
+// Création dynamique de la balise select
+
+function Select(categories) {
+  const InputCategorie = document.createElement("select");
+  // Créer une option vide par défaut
+  const defaultOption = document.createElement("option");
+  defaultOption.value = ""; // Valeur vide
+  defaultOption.textContent = ""; // Texte affiché dans l'option
+  defaultOption.disabled = true; // Empêcher la sélection de cette option
+  defaultOption.selected = true; // La rendre sélectionnée par défaut
+  InputCategorie.appendChild(defaultOption); // Ajouter l'option vide au début
+
+  for (let i = 0; i < categories.length; i++) {
+    const Option = document.createElement("option");
+    Option.value = categories[i].id; // Utilisez categories[i].id
+    Option.textContent = categories[i].name; // Utilisez categories[i].name
+    InputCategorie.appendChild(Option); // Ajoutez l'option à select
+  }
+  console.log(InputCategorie);
+  InputCategorie.setAttribute("id", "categorie_nouveau_projet")
+  const Div_form = document.getElementById("balise_select");
+  Div_form.appendChild(InputCategorie);
 }
