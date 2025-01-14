@@ -5,7 +5,6 @@ fetch(url)
   .then(response => response.json())
   .then(data => {
     projets = data;
-    console.log(projets)
     genererProjets(projets);
     trouverCategorie(projets);
     genererImages(projets);
@@ -30,7 +29,6 @@ function genererProjets(projets) {
     images.appendChild(article);
     article.appendChild(imageElement);
     article.appendChild(titreElement);
-    console.log(element.id)
   }
 }
 function trouverCategorie(projets) {
@@ -82,7 +80,6 @@ function filtercategorie(categories, projets) {
 // CHANGEMENTS STYLE HTML
 
 const boutonLogin = document.querySelector(".login");
-console.log(boutonLogin)
 const boutonLogout = document.querySelector(".logout");
 boutonLogin.classList.add("Invisible");
 
@@ -155,7 +152,6 @@ function genererImages(projets) {
     figure.appendChild(poubelle);
     figure.appendChild(imageElement);
     imagesModale.appendChild(figure);
-    console.log(poubelle);
   }
 }
 
@@ -179,14 +175,12 @@ boutonLogout.addEventListener("click", () => {
 
 function SupprimerProjets(projets) {
   const poubelle = document.querySelectorAll(".poubelle");
-  console.log(poubelle);
 
   for (let i = 0; i < poubelle.length; i++) {
     poubelle[i].addEventListener("click", (event) => {
       event.preventDefault();
 
       const charge_utile_suppression = parseInt(event.currentTarget.id);
-      console.log(charge_utile_suppression);
 
       fetch(`http://localhost:5678/api/works/${charge_utile_suppression}`, {
         method: "DELETE",
@@ -242,12 +236,8 @@ function AjoutProjet(categories) {
     const nomNouveau = document.getElementById("titre_nouveau_projet").value
     const categorieNouveau = document.getElementById("categorie_nouveau_projet").value
     const ImageNouveau = document.getElementById("bouton_depose").files[0]
-    console.log(categorieNouveau)
     // Ajouter dans FORMDATA
     formData.append('title', nomNouveau);
-    console.log(ImageNouveau)
-    console.log(nomNouveau)
-    console.log(categorieNouveau)
     formData.append('category', categorieNouveau);
     if (ImageNouveau !== undefined && ImageNouveau !== null && nomNouveau !== "" && categorieNouveau !== "") {
       formData.append('image', ImageNouveau);
@@ -268,7 +258,6 @@ function AjoutProjet(categories) {
               projets.push(data);
               const AncienMessage = document.querySelector(".Div_envoie p")
               if (AncienMessage !== null) {
-                console.log(AncienMessage)
                 AncienMessage.remove()
               }
               //je vide les champs
@@ -296,7 +285,6 @@ function AjoutProjet(categories) {
       // JE SUPPRIME L'ANCIEN MESSAGE D'ERREUR
       const AncienMessage = document.querySelector(".Div_envoie p")
       if (AncienMessage !== null) {
-        console.log(AncienMessage)
         AncienMessage.remove()
       }
       const MessageErreur = document.createElement("p")
@@ -383,7 +371,6 @@ function Select(categories) {
     Option.textContent = categories[i].name; // Utilisez categories[i].name
     InputCategorie.appendChild(Option); // Ajoutez l'option à select
   }
-  console.log(InputCategorie);
   InputCategorie.setAttribute("id", "categorie_nouveau_projet")
   const Div_form = document.getElementById("balise_select");
   Div_form.appendChild(InputCategorie);
