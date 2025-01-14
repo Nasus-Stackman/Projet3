@@ -232,7 +232,6 @@ function AjoutProjet(categories) {
 
     // Création FORMDATA depuis FORMULAIRE
     const formData = new FormData();
-
     const nomNouveau = document.getElementById("titre_nouveau_projet").value
     const categorieNouveau = document.getElementById("categorie_nouveau_projet").value
     const ImageNouveau = document.getElementById("bouton_depose").files[0]
@@ -356,8 +355,12 @@ function netoyer_image() {
 // Création dynamique de la balise select
 
 function Select(categories) {
-  const InputCategorie = document.createElement("select");
-  // Créer une option vide par défaut
+  const label = document.createElement("label");
+  label.setAttribute("for", "categorie_nouveau_projet");
+  label.textContent = "Catégorie";
+  label.setAttribute("id", "balise_label");
+  const Div_form = document.getElementById("balise_select");
+  const InputCategorie = document.createElement("select"); 
   const defaultOption = document.createElement("option");
   defaultOption.value = ""; // Valeur vide
   defaultOption.textContent = ""; // Texte affiché dans l'option
@@ -372,6 +375,6 @@ function Select(categories) {
     InputCategorie.appendChild(Option); // Ajoutez l'option à select
   }
   InputCategorie.setAttribute("id", "categorie_nouveau_projet")
-  const Div_form = document.getElementById("balise_select");
+  Div_form.appendChild(label);
   Div_form.appendChild(InputCategorie);
 }
