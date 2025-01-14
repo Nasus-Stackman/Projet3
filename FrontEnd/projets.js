@@ -84,45 +84,45 @@ function filtercategorie(categories, projets) {
 const boutonLogin = document.querySelector(".login");
 console.log(boutonLogin)
 const boutonLogout = document.querySelector(".logout");
-boutonLogin.classList.add("V");
+boutonLogin.classList.add("Invisible");
 
 function VisuelEdition() {
   document.getElementById("logo_2").style.display = "none";
   const boutonLogout = document.querySelector(".logout");
-  boutonLogout.classList.add("V");
+  boutonLogout.classList.add("Invisible");
 
   // BOUTON LOGIN
   //const boutonLogin = document.querySelector(".login");
-  boutonLogin.classList.add("V");
-  boutonLogout.classList.remove("V");
+  boutonLogin.classList.add("Invisible");
+  boutonLogout.classList.remove("Invisible");
   // BANDE NOIRE
   const ModeEdition = document.querySelector(".Mode_edition");
-  ModeEdition.classList.remove("V");
+  ModeEdition.classList.remove("Invisible");
   // ACCES MODALE
   document.getElementById("logo_2").style.display = "inline";
   const Modale = document.querySelector(".modale_js")
-  Modale.classList.remove("V")
+  Modale.classList.remove("Invisible")
   // FILTRES
   const Filtres = document.querySelector(".filtres");
-  Filtres.classList.add("V")
+  Filtres.classList.add("Invisible")
 }
 
 function VisuelStandard() {
   const boutonLogout = document.querySelector(".logout");
   // BOUTON LOGIN
   //const boutonLogin = document.querySelector(".login");
-  boutonLogin.classList.remove("V");
-  boutonLogout.classList.add("V");
+  boutonLogin.classList.remove("Invisible");
+  boutonLogout.classList.add("Invisible");
   // BANDE NOIRE
   const ModeEdition = document.querySelector(".Mode_edition");
-  ModeEdition.classList.add("V");
+  ModeEdition.classList.add("Invisible");
   // ACCES MODALE
   document.getElementById("logo_2").style.display = "none";
   const Modale = document.querySelector(".modale_js")
-  Modale.classList.add("V")
+  Modale.classList.add("Invisible")
   // FILTRES
   const Filtres = document.querySelector(".filtres");
-  Filtres.classList.remove("V")
+  Filtres.classList.remove("Invisible")
 }
 VisuelStandard();
 
@@ -249,7 +249,7 @@ function AjoutProjet(categories) {
     console.log(nomNouveau)
     console.log(categorieNouveau)
     formData.append('category', categorieNouveau);
-    if (ImageNouveau !== undefined && ImageNouveau !== null && nomNouveau !== "" && categorieNouveau !== undefined) {
+    if (ImageNouveau !== undefined && ImageNouveau !== null && nomNouveau !== "" && categorieNouveau !== "") {
       formData.append('image', ImageNouveau);
       // Reqûete
       fetch('http://localhost:5678/api/works', {
@@ -344,7 +344,7 @@ function affichage_image() {
   const bouton_depose = document.getElementById("bouton_depose").style.display = "none";
   //4
   const taille_max = document.querySelector(".taille_max");
-  taille_max.classList.add("V");
+  taille_max.classList.add("Invisible");
   //IMAGE
 }
 
@@ -358,7 +358,7 @@ function netoyer_image() {
   const bouton_depose = document.getElementById("bouton_depose").style.display = "";
   //4
   const taille_max = document.querySelector(".taille_max");
-  taille_max.classList.remove("V");
+  taille_max.classList.remove("Invisible");
   //IMAGE
   const ImageNouvelle = document.querySelector(".Div_deposer img");
   ImageNouvelle.remove();
